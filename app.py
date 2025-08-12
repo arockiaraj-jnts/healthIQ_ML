@@ -5,7 +5,7 @@ from dashboard_routes import dashboard_bp,emp_dashboard_bp
 from login_routes import login_bp,logout_bp
 from datetime import date
 from file_process import process_pdf
-from curd_web import getLipidTrenddata,getThyroidTrenddata,convertLipidtoimage,getglucoseTrenddata,convertGlucosetoimage,saveNewEmployee,getemployeeDetails,save_lab_reports_values,getUploadedPdffiles,convertThyroidtoimage
+from curd_web import getLipidTrenddata,getThyroidTrenddata,getpulmonaryTrenddata,convertpulmonarytoimage,getLiverTrenddata,convertLivertoimage,convertLipidtoimage,getglucoseTrenddata,convertGlucosetoimage,saveNewEmployee,getemployeeDetails,save_lab_reports_values,getUploadedPdffiles,convertThyroidtoimage
 
 app=Flask(__name__)
 app.secret_key=secrets.token_hex(32)
@@ -56,6 +56,14 @@ def get_employee(id):
         glucose_trend_data = getglucoseTrenddata(ohc_id)
         image_base645=convertGlucosetoimage(glucose_trend_data)
         return render_template('partial/employee_modal_content.html', chart=image_base645,title='Glucose')
+    elif(id=='liver'):
+        liver_trend_data = getLiverTrenddata(ohc_id)
+        image_base645=convertLivertoimage(liver_trend_data)
+        return render_template('partial/employee_modal_content.html', chart=image_base645,title='Glucose')
+    elif(id=='pulmonary'):
+        pulmonary_trend_data = getpulmonaryTrenddata(ohc_id)
+        image_base645=convertpulmonarytoimage(pulmonary_trend_data)
+        return render_template('partial/employee_modal_content.html', chart=image_base645,title='Pulmonary')
 
 @app.route('/get_employee_pdfreport/<report_name>')
 def get_employee_pdfreport(report_name):    

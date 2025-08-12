@@ -318,3 +318,123 @@ def extract_thyroid_data(ocr_text,report_name,output_pdf_path):
     result["report_name"]=report_name
     # Print final dictionary
     return result
+
+def extract_liver_data(ocr_text,report_name,output_pdf_path):
+    result={}
+    ocr_text = ocr_text.replace(',', '.').replace('}', ')').replace(']', ')').replace('{', '(').replace('[', '(')
+
+    # Pattern to match test name and value
+    pattern = r'([\w\s/().*-]+?)\s+(\d+\.?\d*)\s*[\w/%]*\s*\(.*?\)'
+
+    # Find all matches
+    matches = re.findall(pattern, ocr_text)
+    key_mapping = {
+    "Serum\nBILIRUBIN-TOTAL (Diazo)**": "bilirubin_total",
+    "BILIRUBIN - DIRECT (Diazo)": "bilirubin_direct",
+    "BILIRUBIN - INDIRECT (Calculated)": "bilirubin_indirect",
+    "SGOT/ AST (without PSP. TFCC)":"sgot_ast",
+    "s SGPT/ ALT (without PSP. 1FCC)":"sgpt_alt",
+    "nal ALP (p-NPP.AMP Buffer-IFCC)*":"alp",
+    "TOTAL PROTEIN (mod. Biuret)":"total_protein",
+    "SERUM ALBUMIN (BCG-dye)":"serum_albumin",
+    "SERUM GLOBULIN (Calculated)":"serum_globulin",
+    "ALB/GLOB (A/G) Ratio(Caleulated)":"alb_glob_ratio",
+    "GGT (GCNA-Iece)":"ggt"
+
+
+
+
+    }
+
+    # Print only test name and value
+    for test, value in matches:
+        original_key = test.strip()
+        simplified_key = key_mapping.get(original_key, original_key)
+        value_p = value
+        result[simplified_key] = value_p #.replace(',','.')
+        #print(f"{test.strip()}: {value}")
+    result["output_pdf_path"]=output_pdf_path
+    result["report_name"]=report_name    
+    return result  
+
+def extract_Pulmonary_data(ocr_text,report_name,output_pdf_path):
+    data = {}
+
+# Existing fields...
+    """sex_match = re.search(r'Sex at Birth\s+(Male|Female)', ocr_text, re.IGNORECASE)
+    if sex_match:
+        data['Sex'] = sex_match.group(1)
+
+    height_match = re.search(r'Height\s+(\d+)\s*cm', ocr_text)
+    if height_match:
+        data['Height_cm'] = int(height_match.group(1))
+
+    weight_match = re.search(r'Weight\s+(\d+)\s*kg', ocr_text)
+    if weight_match:
+        data['Weight_kg'] = int(weight_match.group(1))
+
+    bmi_match = re.search(r'BMI\s+([\d.]+)', ocr_text)
+    if bmi_match:
+        data['BMI'] = float(bmi_match.group(1))
+
+    ethnicity_match = re.search(r'Ethnicity\s+(\w+)', ocr_text)
+    if ethnicity_match:
+        data['Ethnicity'] = ethnicity_match.group(1)"""
+
+    fev1_match = re.search(r'Predicted:\s*(\d+)%', ocr_text)
+    if fev1_match:
+        data['FEV1_predicted'] = int(fev1_match.group(1))
+
+    lung_age_match = re.search(r'Lung Age:\s*(\d+)', ocr_text)
+    if lung_age_match:
+        data['lung_age'] = int(lung_age_match.group(1))
+
+    """ test_date_match = re.search(r'Test Date\s*\(([\d-]+\s+[\d:]+)\)', ocr_text)
+    if test_date_match:
+        data['Test_DateTime'] = test_date_match.group(1)
+
+    btps_match = re.search(r'BTPS\s+\(IN/EX\)\s+(\d+)/(\d+)', ocr_text)
+    if btps_match:
+        data['BTPS_IN'] = int(btps_match.group(1))
+        data['BTPS_EX'] = int(btps_match.group(2))"""
+
+    fvc_best_match = re.search(r'FVC\s*\[L\)\s*(\d+\.\d+)', ocr_text)
+    if fvc_best_match:
+        data['FVC_Best_L'] = float(fvc_best_match.group(1))
+
+    # ✅ Extract FEV1 Best [L] — the largest float in a line starting with FEV1
+    fev1_line_match = re.search(r'(FEV1|FEVY)[^\n]*', ocr_text)
+    if fev1_line_match:
+     fev1_line = fev1_line_match.group(0)
+    # Extract all float numbers like 2.98, 2.88 etc.
+    float_values = re.findall(r'\d+\.\d+', fev1_line)
+    if float_values:
+        float_values = [float(val) for val in float_values]
+        data['FEV1_Best_L'] = max(float_values)
+    data["output_pdf_path"]=output_pdf_path
+    data["report_name"]=report_name    
+    return data  
+
+def extract_ESR_data(ocr_text,report_name,output_pdf_path):
+    data = {}  
+    pattern = re.compile(
+    r"(BSR\s*\(Automated/Modified Westergren\))\s+([\d.]+)\s*#?\s*([^\[]+)\[([\d.oO\-]+)\]"
+)
+
+    match = pattern.search(ocr_text)
+    if match:
+        test_name = match.group(1).strip()
+        value = match.group(2).strip()
+        unit = match.group(3).strip()
+        ref_range = match.group(4).replace('o', '0').replace('O', '0').strip()
+
+        data['ESR']=value
+    data["output_pdf_path"]=output_pdf_path
+    data["report_name"]=report_name    
+    return data   
+def extract_audiogram_data (ocr_text,report_name,output_pdf_path):
+   data= {}
+   data["output_pdf_path"]=output_pdf_path
+   data["report_name"]=report_name  
+   return data
+        

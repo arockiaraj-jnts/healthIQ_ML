@@ -85,8 +85,21 @@
       <a class="nav-link" id="thyroid-tab" data-toggle="tab" href="#thyroid" role="tab">Thyroid</a>
     </li>
      <li class="nav-item">
+      <a class="nav-link" id="liver-tab" data-toggle="tab" href="#liver" role="tab">Liver</a>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" id="pulmonary-tab" data-toggle="tab" href="#pulmonary" role="tab">Pulmonary</a>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" id="esr-tab" data-toggle="tab" href="#esr" role="tab">ESR</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="audiogram-tab" data-toggle="tab" href="#audiogram" role="tab">Audiogram</a>
+    </li>
+     <li class="nav-item">
       <a class="nav-link" id="vittal-tab" data-toggle="tab" href="#vittal" role="tab">Vital</a>
     </li>
+   
   </ul>
 
   <!-- Tab Content -->
@@ -190,6 +203,144 @@
       </div>
     </div>
 
+     <!-- Liver -->
+    <div class="tab-pane fade" id="liver" role="tabpanel">
+      <div class="mb-3 border-left border-warning pl-3">
+        <h6 class="text-warning">Liver Panel</h6>
+        <form  id="liver_save"  method="POST"  >
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>BILIRUBIN-TOTAL</label>
+            <input type="text" class="form-control" name="bilirubin_total" value="">
+          </div>
+          <div class="form-group col-md-2">
+            <label>BILIRUBIN - DIRECT</label>
+            <input type="text" class="form-control" name="bilirubin_direct" value="">
+          </div>
+          <div class="form-group col-md-2">
+            <label>BILIRUBIN-INDIRECT</label>
+            <input type="text" class="form-control" name="bilirubin_indirect" value="1.90">
+          </div>
+           <div class="form-group col-md-2">
+            <label>SGOT/ AST</label>
+            <input type="text" class="form-control" name="sgot_ast" value="1.90">
+          </div>
+           <div class="form-group col-md-2">
+            <label>SGPT/ ALT</label>
+            <input type="text" class="form-control" name="sgpt_alt" value="1.90">
+          </div>
+           <div class="form-group col-md-2">
+            <label>ALP</label>
+            <input type="text" class="form-control" name="alp" value="1.90">
+          </div>
+        </div> 
+         <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>TOTAL PROTEIN</label>
+            <input type="text" class="form-control" name="total_protein" value="1.90">
+          </div>
+          <div class="form-group col-md-2">
+            <label>SERUM ALBUMIN</label>
+            <input type="text" class="form-control" name="serum_albumin" value="1.90">
+          </div>
+          <div class="form-group col-md-2">
+            <label>SERUM GLOBULIN</label>
+            <input type="text" class="form-control" name="serum_globulin" value="1.90">
+          </div>
+          <div class="form-group col-md-2">
+            <label>ALB/GLOB (A/G) Ratio</label>
+            <input type="text" class="form-control" name="alb_glob_ratio" value="1.90">
+          </div>
+          <div class="form-group col-md-2">
+            <label>GGT (GCNA-Iece)</label>
+            <input type="text" class="form-control" name="ggt" value="1.90">
+          </div>
+          <div class="form-group col-md-2">  
+             <input type="hidden" class="form-control" name="file_path" value="">
+            <input type="hidden" class="form-control" name="report_name" value="Liver Function Test">          
+             <input type="submit" class="btn btn-primary"  value="Save">
+          </div>
+        </div>
+      </form>
+      </div>
+    </div>
+
+     <!-- Pulmonary -->
+    <div class="tab-pane fade" id="pulmonary" role="tabpanel">
+      <div class="mb-3 border-left border-warning pl-3">
+        <h6 class="text-warning">Pulmonary Panel</h6>
+        <form  id="pulmonary_save"  method="POST"  >
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>FEV1 Predicted%</label>
+            <input type="text" class="form-control" name="FEV1_predicted" value="">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Lung Age</label>
+            <input type="text" class="form-control" name="lung_age" value="">
+          </div>
+          <div class="form-group col-md-2">
+            <label>FVC Best </label>
+            <input type="text" class="form-control" name="FVC_Best_L" value="1.90">
+          </div>
+          <div class="form-group col-md-2">  
+             <input type="hidden" class="form-control" name="file_path" value="">
+            <input type="hidden" class="form-control" name="report_name" value="Pulmonary Function Test">          
+             <input type="submit" class="btn btn-primary"  value="Save">
+          </div>
+        </div>          
+      </form>
+      </div>
+    </div>
+
+     <!-- ESR -->
+    <div class="tab-pane fade" id="esr" role="tabpanel">
+      <div class="mb-3 border-left border-warning pl-3">
+        <h6 class="text-warning">ESR Panel</h6>
+        <form  id="esr_save"  method="POST"  >
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>ESR (Automated/Modified Westergren)</label>
+            <input type="text" class="form-control" name="ESR" value="">
+          </div>
+          
+          <div class="form-group col-md-2">  
+             <input type="hidden" class="form-control" name="file_path" value="">
+            <input type="hidden" class="form-control" name="report_name" value="ERYTHROCYTE SEDIMENTATION">          
+             <input type="submit" class="btn btn-primary"  value="Save">
+          </div>
+        </div>          
+      </form>
+      </div>
+    </div>
+
+
+    <!-- Audiogram -->
+    <div class="tab-pane fade" id="audiogram" role="tabpanel">
+      <div class="mb-3 border-left border-warning pl-3">
+        <h6 class="text-warning">Audiogram Panel</h6>
+        <form  id="audiogram_save"  method="POST"  >
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Left</label>
+            <input type="text" class="form-control" name="left" value="" required>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label>Right</label>
+            <input type="text" class="form-control" name="right" value="" required>
+          </div>
+          
+          <div class="form-group col-md-2">  
+             <input type="hidden" class="form-control" name="file_path" value="">
+            <input type="hidden" class="form-control" name="report_name" value="Pure Tone Audiogram">          
+             <input type="submit" class="btn btn-primary"  value="Save">
+          </div>
+        </div>          
+      </form>
+      </div>
+    </div>
+
     <!-- Vittal -->
     <div class="tab-pane fade" id="vittal" role="tabpanel">
       <div class="mb-3 border-left border-warning pl-3">
@@ -268,6 +419,103 @@
         alert(response.message)
         if (response.status === 'success')
            $('#lipid_save :input').prop('disabled', true);
+      });
+
+     
+
+   });
+
+
+   //save liver
+   $('#liver_save').on('submit', function (e) {
+      //alert('raj')
+      
+      e.preventDefault();
+      let formData = {};
+      $(this).serializeArray().forEach(function (field) {
+          formData[field.name] = field.value;
+      });
+      formData['table_name'] = 'liver_profile_results'; 
+      formData['empid'] = $('#empId').val(); 
+      formData['report_date'] = $('#report_date').val(); 
+      console.log(formData);  
+      $.post('/save_reports', formData, function(response) {
+        console.log(response);
+        alert(response.message)
+        if (response.status === 'success')
+           $('#liver_save :input').prop('disabled', true);
+      });
+
+     
+
+   });
+
+    //save pulmonary
+   $('#pulmonary_save').on('submit', function (e) {
+      //alert('raj')
+      
+      e.preventDefault();
+      let formData = {};
+      $(this).serializeArray().forEach(function (field) {
+          formData[field.name] = field.value;
+      });
+      formData['table_name'] = 'pulmonary_profile_results'; 
+      formData['empid'] = $('#empId').val(); 
+      formData['report_date'] = $('#report_date').val(); 
+      console.log(formData);  
+      $.post('/save_reports', formData, function(response) {
+        console.log(response);
+        alert(response.message)
+        if (response.status === 'success')
+           $('#pulmonary_save :input').prop('disabled', true);
+      });
+
+     
+
+   });
+
+    //save esr
+   $('#esr_save').on('submit', function (e) {
+      //alert('raj')
+      
+      e.preventDefault();
+      let formData = {};
+      $(this).serializeArray().forEach(function (field) {
+          formData[field.name] = field.value;
+      });
+      formData['table_name'] = 'ESR_results'; 
+      formData['empid'] = $('#empId').val(); 
+      formData['report_date'] = $('#report_date').val(); 
+      console.log(formData);  
+      $.post('/save_reports', formData, function(response) {
+        console.log(response);
+        alert(response.message)
+        if (response.status === 'success')
+           $('#esr_save :input').prop('disabled', true);
+      });
+
+     
+
+   });
+
+   //save audiogram
+   $('#audiogram_save').on('submit', function (e) {
+      //alert('raj')
+      
+      e.preventDefault();
+      let formData = {};
+      $(this).serializeArray().forEach(function (field) {
+          formData[field.name] = field.value;
+      });
+      formData['table_name'] = 'audiogram_results'; 
+      formData['empid'] = $('#empId').val(); 
+      formData['report_date'] = $('#report_date').val(); 
+      console.log(formData);  
+      $.post('/save_reports', formData, function(response) {
+        console.log(response);
+        alert(response.message)
+        if (response.status === 'success')
+           $('#audiogram_save :input').prop('disabled', true);
       });
 
      
@@ -414,12 +662,16 @@
         processData: false,  // prevent jQuery from converting the data
         contentType: false,  // prevent jQuery from setting contentType
         success: function (response) {
-           // console.log(response)
+            console.log(response)
         if (response.status === 'success') {
             $('#loader').hide();
             let glucoseData = response.alldata[0];
             let thyroidData = response.alldata[1];
-            let lipiddata = response.alldata[2];  // extract the object from the array
+            let lipiddata = response.alldata[2];
+            let liverdata = response.alldata[6]; 
+            let pulmonarydata = response.alldata[7]; 
+            let ESRdata = response.alldata[8]; 
+            let audiogramdata = response.alldata[9];  // extract the object from the array
             //setTimeout(() => {
                  $('#glucose input[name="fasting_blood_glucose"]').val(glucoseData.fasting_blood_glucose);
                  $('#glucose input[name="post_prandial_blood_glucose"]').val(glucoseData.post_prandial_blood_glucose);
@@ -436,6 +688,29 @@
                  $('#lipid input[name="ldl_cholesterol"]').val(lipiddata.ldl_cholesterol);
                  $('#lipid input[name="vldl"]').val(lipiddata.vldl);
                  $('#lipid input[name="file_path"]').val(lipiddata.output_pdf_path); 
+                 $('#liver input[name="bilirubin_total"]').val(liverdata.bilirubin_total);
+                 $('#liver input[name="bilirubin_direct"]').val(liverdata.bilirubin_direct); 
+                 $('#liver input[name="bilirubin_indirect"]').val(liverdata.bilirubin_indirect); 
+                 $('#liver input[name="sgot_ast"]').val(liverdata.sgot_ast);
+                 $('#liver input[name="sgpt_alt"]').val(liverdata.sgpt_alt); 
+                 $('#liver input[name="alp"]').val(liverdata.alp); 
+                 $('#liver input[name="total_protein"]').val(liverdata.total_protein);
+                 $('#liver input[name="serum_albumin"]').val(liverdata.serum_albumin); 
+                 $('#liver input[name="serum_globulin"]').val(liverdata.serum_globulin); 
+                 $('#liver input[name="alb_glob_ratio"]').val(liverdata.alb_glob_ratio);
+                 $('#liver input[name="ggt"]').val(liverdata.ggt); 
+                 $('#liver input[name="file_path"]').val(liverdata.output_pdf_path); 
+
+                 $('#pulmonary input[name="FEV1_predicted"]').val(pulmonarydata.FEV1_predicted); 
+                 $('#pulmonary input[name="lung_age"]').val(pulmonarydata.lung_age);
+                 $('#pulmonary input[name="FVC_Best_L"]').val(pulmonarydata.FVC_Best_L); 
+                 $('#pulmonary input[name="file_path"]').val(pulmonarydata.output_pdf_path); 
+
+                 $('#esr input[name="ESR"]').val(ESRdata.ESR); 
+                 $('#esr input[name="file_path"]').val(ESRdata.output_pdf_path); 
+
+                 $('#audiogram input[name="file_path"]').val(audiogramdata.output_pdf_path); 
+
                  $('#vittal input[name="glucose_random"]').val(glucoseData.post_prandial_blood_glucose);
                  $('#vittal input[name="glucose_fasting"]').val(glucoseData.fasting_blood_glucose);
                  $('#vittal input[name="total_cholesterol"]').val(lipiddata.total_cholesterol);

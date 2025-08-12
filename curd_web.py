@@ -1,4 +1,4 @@
-from config import engine,users,metadata,employeeList,labReports,vitalResults,lipid_profile_results,glucose_results,thyroid_results
+from config import engine,users,metadata,employeeList,labReports,pulmonary_profile_results,vitalResults,lipid_profile_results,glucose_results,thyroid_results,liver_profile_results
 from sqlalchemy import select, and_ , func , case, or_ ,insert
 from sqlalchemy.exc import SQLAlchemyError,DBAPIError
 from math import ceil
@@ -182,6 +182,50 @@ def getglucoseTrenddata(registrationId):
         #rows = result.fetchall()
         glucosedata = [dict(r._mapping) for r in result.fetchall()]
         return glucosedata  
+    
+def getLiverTrenddata(registrationId):
+    with engine.connect() as conn:
+        # 1. Get total count for pagination
+        
+        stmt = select(
+            labReports.c.registration_id,
+            labReports.c.report_date,
+            liver_profile_results.c.bilirubin_total,
+            liver_profile_results.c.bilirubin_direct,
+            liver_profile_results.c.bilirubin_indirect
+           
+            
+            ).select_from(
+                liver_profile_results.outerjoin(labReports, liver_profile_results.c.report_id == labReports.c.id)
+            ).where(
+                labReports.c.registration_id == registrationId
+            )
+        result = conn.execute(stmt)
+        #rows = result.fetchall()
+        liverdata = [dict(r._mapping) for r in result.fetchall()]
+        return liverdata
+
+def getpulmonaryTrenddata(registrationId):
+    with engine.connect() as conn:
+        # 1. Get total count for pagination
+        
+        stmt = select(
+            labReports.c.registration_id,
+            labReports.c.report_date,
+            pulmonary_profile_results.c.FEV1_predicted,
+            pulmonary_profile_results.c.lung_age,
+            pulmonary_profile_results.c.FVC_Best_L
+           
+            
+            ).select_from(
+                pulmonary_profile_results.outerjoin(labReports, pulmonary_profile_results.c.report_id == labReports.c.id)
+            ).where(
+                labReports.c.registration_id == registrationId
+            )
+        result = conn.execute(stmt)
+        #rows = result.fetchall()
+        pulmonarydata = [dict(r._mapping) for r in result.fetchall()]
+        return pulmonarydata          
 
 def getLoginDetails(username,password):
     with engine.connect() as conn:
@@ -375,6 +419,115 @@ def convertGlucosetoimage (glucose_data):
 
     # ✅ Chart formatting
     plt.title("Glucose Trend")
+    plt.xlabel("Report Date")
+    plt.ylabel("Values")
+    plt.legend()
+    plt.tight_layout()
+
+    # ✅ Save image
+    #plt.savefig("static/plots/health_trend.png")
+    # plt.show()  # Uncomment this if running locally to preview
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()  # Always close after saving
+
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')  
+    return  image_base64  
+
+
+def convertLivertoimage (liver_data):
+    df = pd.DataFrame(liver_data)
+    print(df.head())
+
+    # ✅ Convert report_date to datetime safely (supports datetime.date or str)
+    df['report_date'] = pd.to_datetime(df['report_date'])
+
+    # ✅ Convert values to float (if needed)
+    df['bilirubin_total'] = df['bilirubin_total'].astype(float)
+    df['bilirubin_direct'] = df['bilirubin_direct'].astype(float)
+    df['bilirubin_indirect'] = df['bilirubin_indirect'].astype(float)
+    
+
+    # ✅ Set Seaborn theme
+    sns.set_theme(style="whitegrid")
+
+    plt.figure(figsize=(12, 4))
+
+    # ✅ Plot trends
+    sns.lineplot(x='report_date', y='bilirubin_total', data=df, marker='o', label='Bilirubin Total')
+    sns.lineplot(x='report_date', y='bilirubin_direct', data=df, marker='o', label='Bilirubin Direct')
+    sns.lineplot(x='report_date', y='bilirubin_indirect', data=df, marker='o', label='Bilirubin Indirect')
+    for x, y in zip(df['report_date'], df['bilirubin_total']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')
+    for x, y in zip(df['report_date'], df['bilirubin_direct']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')   
+    for x, y in zip(df['report_date'], df['bilirubin_indirect']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')      
+
+    # ✅ Format X-axis as dd-mm-YYYY
+    ax = plt.gca()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%m-%Y'))
+    ax.set_xticks(df['report_date'])  # show only actual dates
+    plt.xticks(rotation=45)
+
+    # ✅ Chart formatting
+    plt.title("Liver Trend")
+    plt.xlabel("Report Date")
+    plt.ylabel("Values")
+    plt.legend()
+    plt.tight_layout()
+
+    # ✅ Save image
+    #plt.savefig("static/plots/health_trend.png")
+    # plt.show()  # Uncomment this if running locally to preview
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()  # Always close after saving
+
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')  
+    return  image_base64 
+
+def convertpulmonarytoimage (pulmonary_trend_data):
+    df = pd.DataFrame(pulmonary_trend_data)
+    print(df.head())
+
+    # ✅ Convert report_date to datetime safely (supports datetime.date or str)
+    df['report_date'] = pd.to_datetime(df['report_date'])
+
+    # ✅ Convert values to float (if needed)
+    df['FEV1_predicted'] = df['FEV1_predicted'].astype(float)
+    df['lung_age'] = df['lung_age'].astype(float)
+    df['FVC_Best_L'] = df['FVC_Best_L'].astype(float)
+    
+
+    # ✅ Set Seaborn theme
+    sns.set_theme(style="whitegrid")
+
+    plt.figure(figsize=(12, 4))
+
+    # ✅ Plot trends
+    sns.lineplot(x='report_date', y='FEV1_predicted', data=df, marker='o', label='FEV1 Predicted %')
+    sns.lineplot(x='report_date', y='lung_age', data=df, marker='o', label='Lung Age')
+    sns.lineplot(x='report_date', y='FVC_Best_L', data=df, marker='o', label='FVC BEST')
+    for x, y in zip(df['report_date'], df['FEV1_predicted']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')
+    for x, y in zip(df['report_date'], df['lung_age']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')   
+    for x, y in zip(df['report_date'], df['FVC_Best_L']):
+        plt.text(x, y, f'{y:.1f}', fontsize=10, ha='center', va='bottom')      
+
+    # ✅ Format X-axis as dd-mm-YYYY
+    ax = plt.gca()
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%m-%Y'))
+    ax.set_xticks(df['report_date'])  # show only actual dates
+    plt.xticks(rotation=45)
+
+    # ✅ Chart formatting
+    plt.title("Pulmonary Trend")
     plt.xlabel("Report Date")
     plt.ylabel("Values")
     plt.legend()
@@ -630,4 +783,46 @@ def saveCBCdata(report_name,output_save_path,empId,report_date):
             
 
     except (SQLAlchemyError, DBAPIError) as e:
-        print(" Transaction failed and was rolled back:", e)               
+        print(" Transaction failed and was rolled back:", e)   
+
+def saveNonTrenddata(report_name,output_save_path,empId,report_date):
+    #print(report_name)
+    lab_reports=metadata.tables["lab_reports"]
+    
+    try:
+     with engine.begin() as conn:       
+        
+        # Step 1: Insert metadata into lab_reports
+            registration_id=empId,
+            
+            chk_stmt=check_data_exists(registration_id,report_date,report_name)
+            result_chk=conn.execute(chk_stmt).fetchone() #check duplicate entry
+            if not result_chk :
+                    report_stmt = insert(lab_reports).values(
+                    reportname=report_name,
+                    registration_id=registration_id,
+                    #registration_datetime=safe_parse_datetime(parsed_data.get("Registration Date/Time")),
+                    #patient_name=parsed_data.get("Patient Name"),
+                    #collection_datetime=safe_parse_datetime(parsed_data.get("Collection Date/Time")),
+                    #reporting_datetime=safe_parse_datetime(parsed_data.get("Reporting Date/Time")),
+                    #referred_by=parsed_data.get("Referred By"),
+                    #age_sex=parsed_data.get("Age/Sex"),
+                    file_path=output_save_path,
+                    report_date=report_date
+                    )
+                    result = conn.execute(report_stmt)
+                
+                    insert_report_id = result.inserted_primary_key[0]           
+                    #conn.commit()
+                    print('A',insert_report_id)
+
+                    
+                    #result = conn.execute(report_stmt)
+            else :
+                print("Duplicate rows")
+                        
+
+            
+
+    except (SQLAlchemyError, DBAPIError) as e:
+        print(" Transaction failed and was rolled back:", e)                    
